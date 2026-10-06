@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,7 +38,7 @@ import com.example.thornchhuntheang.model.sampleExpenses
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(expense: List<Expense> = sampleExpenses){
+fun DashboardScreen(expenses: List<Expense> = sampleExpenses){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -47,23 +48,34 @@ fun DashboardScreen(expense: List<Expense> = sampleExpenses){
                 )
             )
         }
-    ) { paddingValues ->
+    ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(innerPadding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item { TotalDisplayCard(expense = expense) }
-            item { CategorySpendingView(expense = expense) }
+            item { TotalDisplayCard(expenses = expenses) }
+            item { CategorySpendingView(expenses = expenses) }
+            item { Text(
+                text = "Recent Expense",
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            items(expenses) { expense ->
+                ExpenseRow(expense = expense)
+            }
         }
     }
 }
 
 @Composable
-fun TotalDisplayCard(expense: List<Expense>) {
-    val totalAmount = expense.sumOf { it.amount }
+fun TotalDisplayCard(expenses: List<Expense>) {
+    val totalAmount = expenses.sumOf { it.amount }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -92,15 +104,15 @@ fun TotalDisplayCard(expense: List<Expense>) {
 }
 
 @Composable
-fun CategorySpendingView (expense: List<Expense>) {
-    val categoryTotals = expense.groupBy { it.category }
+fun CategorySpendingView (expenses: List<Expense>) {
+    val categoryTotals = expenses.groupBy { it.category }
         .mapValues { entry -> entry.value.sumOf { it.amount } }
 
     val maxCategoryTotal = categoryTotals.values.maxOrNull()?: 1.0
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(
             modifier = Modifier
@@ -145,6 +157,57 @@ fun CategorySpendingView (expense: List<Expense>) {
             }
         }
     }
+}
+
+@Composable
+fun ExpenseRow(expense: Expense) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = expense.category,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = expense.date,
+                    fontSize = 12.sp,
+                    color  = Color.Gray
+                )
+                if (!expense.remark.isNullOrEmpty()){
+                    Text(
+                        text = expense.remark,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+                Text(
+                    text = "${expense.currency}${String.format("%.2f", expense.amount)}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ExpenseRowPrewiew() {
+    ExpenseRow(
+        expense = Expense("1", 45.00, "$", "Food", "2026-10-01", "Lunch with team")
+    )
 }
 
 @Preview(showBackground = true)
