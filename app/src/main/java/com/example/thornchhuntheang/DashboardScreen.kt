@@ -191,13 +191,13 @@ fun ExpenseRow(expense: Expense) {
                         color = MaterialTheme.colorScheme.secondary
                     )
                 }
-                Text(
-                    text = "${expense.currency}${String.format("%.2f", expense.amount)}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
             }
+            Text(
+                text = "${expense.currency}${String.format("%.2f", expense.amount)}",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }
