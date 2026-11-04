@@ -1,17 +1,18 @@
 package com.example.thornchhuntheang.model
 
+import java.time.LocalDate
+
 data class Expense(
     val id: String,
     val amount: Double,
     val currency: String = "$",
     val category: String,
-    val date: String,
+    val date: LocalDate,
     val remark: String? = null
 )
 
 val sampleExpenses = listOf(
-    Expense("1", 12.50, "$", "Food", "2026-10-01", "Lunch"),
-    Expense("2", 45.00, "$", "Transport", "2026-10-02"),
-    Expense("3", 120.00, "$", "Shopping", "2026-10-03", "Shoes"),
-    Expense("4", 8.00, "$", "Food", "2026-10-04", "Coffee")
+    Expense("1", 45.0, "$", "Food", LocalDate.now(), "Groceries"),
+    Expense("2", 15.0, "$", "Transport", LocalDate.now().minusDays(1), "Taxi"),
+    Expense("3", 120.0, "$", "Shopping", LocalDate.now().minusDays(2), "New Shoes")
 )

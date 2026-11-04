@@ -1,7 +1,6 @@
 package com.example.thornchhuntheang
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.thornchhuntheang.model.Expense
 import com.example.thornchhuntheang.model.sampleExpenses
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,7 +79,7 @@ fun TotalDisplayCard(expenses: List<Expense>) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -91,7 +91,7 @@ fun TotalDisplayCard(expenses: List<Expense>) {
             Text(
                 text = "This Month's Total",
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "$${String.format("%.2f", totalAmount)}",
@@ -112,7 +112,7 @@ fun CategorySpendingView (expenses: List<Expense>) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainerHigh)
     ) {
         Column(
             modifier = Modifier
@@ -180,7 +180,7 @@ fun ExpenseRow(expense: Expense) {
                     fontSize = 16.sp
                 )
                 Text(
-                    text = expense.date,
+                    text = expense.date.toString(),
                     fontSize = 12.sp,
                     color  = Color.Gray
                 )
@@ -206,7 +206,7 @@ fun ExpenseRow(expense: Expense) {
 @Composable
 fun ExpenseRowPrewiew() {
     ExpenseRow(
-        expense = Expense("1", 45.00, "$", "Food", "2026-10-01", "Lunch with team")
+        expense = Expense("1", 45.00, "$", "Food", LocalDate.now(), "Lunch with team")
     )
 }
 
